@@ -1,7 +1,8 @@
-import json, hmac, hashlib, time, requests, base64
+import json, hmac, hashlib, time, requests, base64, os
 from requests.auth import AuthBase
 
-# Create custom authentication for Exchange
+
+#Create custom authentication for Exchange
 class CoinbaseExchangeAuth(AuthBase):
     def __init__(self, api_key, secret_key, passphrase):
         self.api_key = api_key
@@ -26,10 +27,11 @@ class CoinbaseExchangeAuth(AuthBase):
         return request
 
 api_url = 'https://api.pro.coinbase.com/'
-auth = CoinbaseExchangeAuth(API_KEY,SECRET_KEY,PASSPHRASE)
+auth = CoinbaseExchangeAuth(os.getenv('key'),os.getenv('secret'), os.getenv('pass'))
 
 # Get accounts
-r = requests.get(api_url + 'accounts/',  auth=auth)
+r = requests.get(api_url + 'accounts',  auth=auth)
 with open('cb.json', 'w') as outfile:
-    json.dump(r.json(), outfile, indent=2, sort_keys=True,)
+    json.dump(r.json(), outfile, indent=2, sort_keys=True)
+
 print(r.status_code)
